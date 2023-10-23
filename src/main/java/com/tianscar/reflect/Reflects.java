@@ -594,10 +594,11 @@ public final class Reflects {
         if (clazz.isArray()) {
             try {
                 StringBuilder builder = new StringBuilder();
+                Class<?> cl = clazz;
                 do {
                     builder.append("[]");
-                    clazz = clazz.getComponentType();
-                } while (clazz.isArray());
+                    cl = cl.getComponentType();
+                } while (cl.isArray());
                 return clazz.getName() + builder;
             } catch (Throwable ignored) {
             }
