@@ -1,4 +1,4 @@
-# Reflection Compatible Layer
+# Java Reflection Compatible Layer
 Compatible layer for `java.lang.reflect` API which could run on Java 6+ (which meant fully support Android) and bypass the [strong encapsulation](https://dev.java/learn/modules/strong-encapsulation/) in Java 16+.
 
 ## Implementation details
