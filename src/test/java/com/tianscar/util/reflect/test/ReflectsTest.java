@@ -1,6 +1,6 @@
-package com.tianscar.reflect.test;
+package com.tianscar.util.reflect.test;
 
-import com.tianscar.reflect.Reflects;
+import com.tianscar.util.reflect.Reflects;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;

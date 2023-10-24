@@ -1,4 +1,4 @@
-package com.tianscar.reflect;
+package com.tianscar.util.reflect;
 
 import sun.misc.Unsafe;
 

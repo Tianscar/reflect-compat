@@ -14,10 +14,10 @@ After obtain this field using `sun.misc.Unsafe`, I use this field to invoke meth
 Compare to Narcissus, this library is pure Java, means you don't need to compile and load the JNI libraries for a new platform, and supports any Java 6+ compatible runtime environment.
 
 ## Usage
-Just copy the [source code](/src/main/java/com/tianscar/reflect/Reflects.java) to your project and use the API.
+Just copy the [source code](/src/main/java/com/tianscar/util/reflect/Reflects.java) to your project and use the API.
 
 [JavaDoc](https://docs.tianscar.com/reflect-compat)  
-[Examples](/src/test/java/com/tianscar/reflect/test/ReflectsTest.java)
+[Examples](/src/test/java/com/tianscar/util/reflect/test/ReflectsTest.java)
 
 ## License
 [MIT](/LICENSE)
