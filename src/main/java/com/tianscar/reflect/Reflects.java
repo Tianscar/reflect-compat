@@ -22,7 +22,7 @@ public final class Reflects {
     private static final Unsafe unsafe;
 
     // Java 6 doesn't have java.lang.invoke.*, so we use them via reflection.
-    public static final Object lookup;
+    private static final Object lookup;
     private static final Method unreflectMethod;
     private static final Method unreflectConstructorMethod;
     private static final Method bindToMethod;
