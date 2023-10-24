@@ -229,6 +229,22 @@ public final class Reflects {
         }
     }
 
+    private static Object checkObject(Object object, Field field) {
+        // NOTE: will throw NullPointerException, as specified, if object is null
+        if (!field.getDeclaringClass().isAssignableFrom(object.getClass())) {
+            StringBuilder builder = new StringBuilder("Can not set ");
+            builder.append(field.getType().getName())
+                    .append(" field ")
+                    .append(field.getDeclaringClass().getName()).append(".").append(field.getName())
+                    .append(" to ");
+            String attemptedType = object.getClass().getName();
+            if (attemptedType.length() > 0) builder.append(attemptedType);
+            else builder.append("null value");
+            throw new IllegalArgumentException(builder.toString());
+        }
+        return object;
+    }
+
     /**
      * Gets the value of a static or instance non-primitive field.
      *
@@ -256,7 +272,7 @@ public final class Reflects {
         // Java 16+
         return isStatic(field.getModifiers()) ?
                 unsafe.getObject(field.getDeclaringClass(), unsafe.staticFieldOffset(field)) :
-                unsafe.getObject(object, unsafe.objectFieldOffset(field));
+                unsafe.getObject(checkObject(object, field), unsafe.objectFieldOffset(field));
     }
 
     /**
@@ -288,7 +304,7 @@ public final class Reflects {
         // Java 16+
         return isStatic(field.getModifiers()) ?
                 unsafe.getBoolean(field.getDeclaringClass(), unsafe.staticFieldOffset(field)) :
-                unsafe.getBoolean(object, unsafe.objectFieldOffset(field));
+                unsafe.getBoolean(checkObject(object, field), unsafe.objectFieldOffset(field));
     }
 
     /**
@@ -320,7 +336,7 @@ public final class Reflects {
         // Java 16+
         return isStatic(field.getModifiers()) ?
                 unsafe.getByte(field.getDeclaringClass(), unsafe.staticFieldOffset(field)) :
-                unsafe.getByte(object, unsafe.objectFieldOffset(field));
+                unsafe.getByte(checkObject(object, field), unsafe.objectFieldOffset(field));
     }
 
     /**
@@ -352,7 +368,7 @@ public final class Reflects {
         // Java 16+
         return isStatic(field.getModifiers()) ?
                 unsafe.getChar(field.getDeclaringClass(), unsafe.staticFieldOffset(field)) :
-                unsafe.getChar(object, unsafe.objectFieldOffset(field));
+                unsafe.getChar(checkObject(object, field), unsafe.objectFieldOffset(field));
     }
 
     /**
@@ -384,7 +400,7 @@ public final class Reflects {
         // Java 16+
         return isStatic(field.getModifiers()) ?
                 unsafe.getShort(field.getDeclaringClass(), unsafe.staticFieldOffset(field)) :
-                unsafe.getShort(object, unsafe.objectFieldOffset(field));
+                unsafe.getShort(checkObject(object, field), unsafe.objectFieldOffset(field));
     }
 
     /**
@@ -416,7 +432,7 @@ public final class Reflects {
         // Java 16+
         return isStatic(field.getModifiers()) ?
                 unsafe.getInt(field.getDeclaringClass(), unsafe.staticFieldOffset(field)) :
-                unsafe.getInt(object, unsafe.objectFieldOffset(field));
+                unsafe.getInt(checkObject(object, field), unsafe.objectFieldOffset(field));
     }
 
     /**
@@ -448,7 +464,7 @@ public final class Reflects {
         // Java 16+
         return isStatic(field.getModifiers()) ?
                 unsafe.getLong(field.getDeclaringClass(), unsafe.staticFieldOffset(field)) :
-                unsafe.getLong(object, unsafe.objectFieldOffset(field));
+                unsafe.getLong(checkObject(object, field), unsafe.objectFieldOffset(field));
     }
 
     /**
@@ -480,7 +496,7 @@ public final class Reflects {
         // Java 16+
         return isStatic(field.getModifiers()) ?
                 unsafe.getFloat(field.getDeclaringClass(), unsafe.staticFieldOffset(field)) :
-                unsafe.getFloat(object, unsafe.objectFieldOffset(field));
+                unsafe.getFloat(checkObject(object, field), unsafe.objectFieldOffset(field));
     }
 
     /**
@@ -512,7 +528,7 @@ public final class Reflects {
         // Java 16+
         return isStatic(field.getModifiers()) ?
                 unsafe.getDouble(field.getDeclaringClass(), unsafe.staticFieldOffset(field)) :
-                unsafe.getDouble(object, unsafe.objectFieldOffset(field));
+                unsafe.getDouble(checkObject(object, field), unsafe.objectFieldOffset(field));
     }
 
     /**
@@ -578,15 +594,15 @@ public final class Reflects {
             else return unsafe.getObject(field.getDeclaringClass(), unsafe.staticFieldOffset(field));
         }
         else {
-            if (fieldType == boolean.class) return unsafe.getBoolean(object, unsafe.objectFieldOffset(field));
-            else if (fieldType == byte.class) return unsafe.getByte(object, unsafe.objectFieldOffset(field));
-            else if (fieldType == char.class) return unsafe.getChar(object, unsafe.objectFieldOffset(field));
-            else if (fieldType == short.class) return unsafe.getShort(object, unsafe.objectFieldOffset(field));
-            else if (fieldType == int.class) return unsafe.getInt(object, unsafe.objectFieldOffset(field));
-            else if (fieldType == long.class) return unsafe.getLong(object, unsafe.objectFieldOffset(field));
-            else if (fieldType == float.class) return unsafe.getFloat(object, unsafe.objectFieldOffset(field));
-            else if (fieldType == double.class) return unsafe.getDouble(object, unsafe.objectFieldOffset(field));
-            else return unsafe.getObject(object, unsafe.objectFieldOffset(field));
+            if (fieldType == boolean.class) return unsafe.getBoolean(checkObject(object, field), unsafe.objectFieldOffset(field));
+            else if (fieldType == byte.class) return unsafe.getByte(checkObject(object, field), unsafe.objectFieldOffset(field));
+            else if (fieldType == char.class) return unsafe.getChar(checkObject(object, field), unsafe.objectFieldOffset(field));
+            else if (fieldType == short.class) return unsafe.getShort(checkObject(object, field), unsafe.objectFieldOffset(field));
+            else if (fieldType == int.class) return unsafe.getInt(checkObject(object, field), unsafe.objectFieldOffset(field));
+            else if (fieldType == long.class) return unsafe.getLong(checkObject(object, field), unsafe.objectFieldOffset(field));
+            else if (fieldType == float.class) return unsafe.getFloat(checkObject(object, field), unsafe.objectFieldOffset(field));
+            else if (fieldType == double.class) return unsafe.getDouble(checkObject(object, field), unsafe.objectFieldOffset(field));
+            else return unsafe.getObject(checkObject(object, field), unsafe.objectFieldOffset(field));
         }
     }
 
@@ -636,7 +652,7 @@ public final class Reflects {
         }
         // Java 16+
         if (isStatic(field.getModifiers())) unsafe.putObject(field.getDeclaringClass(), unsafe.staticFieldOffset(field), value);
-        else unsafe.putObject(object, unsafe.objectFieldOffset(field), value);
+        else unsafe.putObject(checkObject(object, field), unsafe.objectFieldOffset(field), value);
     }
 
     /**
@@ -668,7 +684,7 @@ public final class Reflects {
         }
         // Java 16+
         if (isStatic(field.getModifiers())) unsafe.putBoolean(field.getDeclaringClass(), unsafe.staticFieldOffset(field), value);
-        else unsafe.putBoolean(object, unsafe.objectFieldOffset(field), value);
+        else unsafe.putBoolean(checkObject(object, field), unsafe.objectFieldOffset(field), value);
     }
 
     /**
@@ -700,7 +716,7 @@ public final class Reflects {
         }
         // Java 16+
         if (isStatic(field.getModifiers())) unsafe.putByte(field.getDeclaringClass(), unsafe.staticFieldOffset(field), value);
-        else unsafe.putByte(object, unsafe.objectFieldOffset(field), value);
+        else unsafe.putByte(checkObject(object, field), unsafe.objectFieldOffset(field), value);
     }
 
     /**
@@ -732,7 +748,7 @@ public final class Reflects {
         }
         // Java 16+
         if (isStatic(field.getModifiers())) unsafe.putChar(field.getDeclaringClass(), unsafe.staticFieldOffset(field), value);
-        else unsafe.putChar(object, unsafe.objectFieldOffset(field), value);
+        else unsafe.putChar(checkObject(object, field), unsafe.objectFieldOffset(field), value);
     }
 
     /**
@@ -764,7 +780,7 @@ public final class Reflects {
         }
         // Java 16+
         if (isStatic(field.getModifiers())) unsafe.putShort(field.getDeclaringClass(), unsafe.staticFieldOffset(field), value);
-        else unsafe.putShort(object, unsafe.objectFieldOffset(field), value);
+        else unsafe.putShort(checkObject(object, field), unsafe.objectFieldOffset(field), value);
     }
 
     /**
@@ -796,7 +812,7 @@ public final class Reflects {
         }
         // Java 16+
         if (isStatic(field.getModifiers())) unsafe.putInt(field.getDeclaringClass(), unsafe.staticFieldOffset(field), value);
-        else unsafe.putInt(object, unsafe.objectFieldOffset(field), value);
+        else unsafe.putInt(checkObject(object, field), unsafe.objectFieldOffset(field), value);
     }
 
     /**
@@ -828,7 +844,7 @@ public final class Reflects {
         }
         // Java 16+
         if (isStatic(field.getModifiers())) unsafe.putLong(field.getDeclaringClass(), unsafe.staticFieldOffset(field), value);
-        else unsafe.putLong(object, unsafe.objectFieldOffset(field), value);
+        else unsafe.putLong(checkObject(object, field), unsafe.objectFieldOffset(field), value);
     }
 
     /**
@@ -860,7 +876,7 @@ public final class Reflects {
         }
         // Java 16+
         if (isStatic(field.getModifiers())) unsafe.putFloat(field.getDeclaringClass(), unsafe.staticFieldOffset(field), value);
-        else unsafe.putFloat(object, unsafe.objectFieldOffset(field), value);
+        else unsafe.putFloat(checkObject(object, field), unsafe.objectFieldOffset(field), value);
     }
 
     /**
@@ -892,7 +908,7 @@ public final class Reflects {
         }
         // Java 16+
         if (isStatic(field.getModifiers())) unsafe.putDouble(field.getDeclaringClass(), unsafe.staticFieldOffset(field), value);
-        else unsafe.putDouble(object, unsafe.objectFieldOffset(field), value);
+        else unsafe.putDouble(checkObject(object, field), unsafe.objectFieldOffset(field), value);
     }
 
     /**
